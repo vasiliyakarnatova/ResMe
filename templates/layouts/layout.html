@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+    <head>
+        {% block head %}
+        <link rel = "stylesheet" href="{{url_for('static', filename='style.css')}}">
+        <title>
+            {% block title %}
+            {% endblock %}
+        </title>
+        <div class="topnav">
+            <a href=" {{ url_for('home') }}"> Home </a>
+            {% if 'user_id' not in session %}
+            <a href=" {{ url_for('auth.registration') }}" class="right"> Registartion </a>
+            <a href=" {{ url_for('auth.login') }}"> Login </a>
+            {% else %}
+            <a href=" {{ url_for('restaurants.list_restaurants') }} "> Restaurants </a>
+            {% if session.get('role') == "admin" %}
+            <a href=" {{ url_for('admin.users') }}">Users</a>
+            <a href=" {{ url_for('admin.admin_reservations') }}">All Reservations</a>
+            {% elif session.get('role') == "provider" %}
+            <a href=" {{ url_for('provider.provider_restaurants') }} ">My Restaurants</a>
+            <a href=" {{ url_for('provider.provider_reservations') }}">Reservations</a>
+            {% endif %}
+            {% if 'user_id' in session %}
+            <a href=" {{ url_for('profile.my_reservations') }}" class="right">My Reservations</a>
+            {% endif %}
+            <a href=" {{ url_for('auth.logout') }}"> Logout </a>
+            {% endif %}
+        </div>
+        {% endblock %}
+    </head>
+    <body>
+        <div id = "content">{% block content %} {% endblock %} </div>
+        <div id = "footer">
+            {% block footer %}
+            <div class="footer-flex">
+                <p>For more information: 0888888888</p>
+                <p>Check our Facebook profile to stay up to date with promotions</p>
+                </div>
+            {% endblock %}
+        </div>
+    </body>
+</html>

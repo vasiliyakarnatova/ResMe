@@ -1,0 +1,15 @@
+{% extends "layouts/layout.html" %}
+{% block title %} Add new restaurant {% endblock %}
+{% block content %}
+<h1>Add restaurant</h1>
+<form class="wide-form" action="{{ url_for('create_restaurant.add_new_restaurant') }}" method="post"
+      enctype="multipart/form-data">
+    Name: <input type="text" name="name" value="{{ session.get('edit_restaurant_name', '') }}">
+    Address: <input type="text" name="address" value="{{ session.get('edit_restaurant_address', '') }}">
+    Category: <input type="text" name="category" value="{{ session.get('edit_restaurant_category', '') }}">
+    Open time: <input type="time" name="open_time" value="{{ session.get('edit_restaurant_open_time', '') }}">
+    Close time: <input type="time" name="close_time" value="{{ session.get('edit_restaurant_close_time', '') }}">
+    Description: <textarea name="description">{{ session.get('edit_restaurant_description', '') }}</textarea>
+    <button type="submit">Continue with zones</button>
+</form>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "layouts/layout.html" %}
+{% block title %} Home {% endblock %}
+{% block content %}
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="ResMe" width="400px" height="350px">
+    {% if 'user_id' in session %}
+        <a href="{{ url_for('restaurants.list_restaurants') }}" class="btn">Book</a>
+    {% else %}
+        <a href="{{ url_for('auth.login') }}" class="btn">Book</a>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "layouts/layout.html" %}
+{% block title %} Users {% endblock %}
+
+{% block content %}
+
+<div class="admin-users-wrapper">
+    <h1 class="page-title">Users</h1>
+    <p class="page-subtitle">Manage user roles and access.</p>
+
+    <div class="admin-card">
+        <table class="user-table">
+            <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Change role</th>
+                <th>Action</th>
+            </tr>
+            {% for u in users %}
+            {% if u.role.value != "admin" %}
+            <tr>
+                <form method="post" action="{{ url_for('admin.change_role') }}">
+                    <input type="hidden" name="user_id" value="{{ u.id }}">
+                    <td>{{ u.username }}</td>
+                    <td>{{ u.role.value }}</td>
+                    <td>
+                        <select name="role">
+                            <option value="user" {% if u.role.value == "user" %} selected {% endif %}>User</option>
+                            <option value="provider" {% if u.role.value == "provider" %} selected {% endif %}>Provider</option>
+                        </select>
+                        <button type="submit">Save</button>
+                    </td>
+                    <td class="user-actions-cell">
+                        <button type="submit"
+                                formaction="{{ url_for('admin.delete_user') }}">
+                            Delete
+                        </button>
+                    </td>
+                </form>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}

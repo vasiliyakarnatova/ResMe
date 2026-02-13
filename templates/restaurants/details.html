@@ -1,0 +1,77 @@
+{% extends "layouts/layout.html" %}
+{% block title %}Restaurant details{% endblock %}
+
+{% block content %}
+<h1>{{ restaurant.name }}</h1>
+
+<div class="restaurant-details-card">
+    <div class="restaurant-details-header">
+        {% if restaurant.image_url %}
+        <img src="{{ url_for('static', filename='images/' ~ restaurant.image_url) }}"
+             alt="{{ restaurant.name }}"
+             class="restaurant-details-image">
+        {% endif %}
+        <div class="restaurant-details-main">
+            <p class="restaurant-category">{{ restaurant.category }}</p>
+            <h2 class="restaurant-name">{{ restaurant.name }}</h2>
+            <p><strong>Address:</strong> {{ restaurant.address }}</p>
+            <p><strong>Working hours:</strong> {{ restaurant.open_time }} – {{ restaurant.close_time }}</p>
+        </div>
+    </div>
+
+    <div class="restaurant-details-body">
+        <h3>Description</h3>
+        <p> {{ restaurant.description }}</p>
+    </div>
+
+    <div class="restaurant-reviews">
+        <div class="restaurant-reviews-header">
+            <h3>Reviews</h3>
+
+            {% if session["role"] == "user" %}
+            <a href="{{ url_for('review.create_review', restaurant_id=restaurant.id) }}" class="btn btn-small">
+                + Add review
+            </a>
+            {% endif %}
+        </div>
+
+        {% if restaurant.reviews %}
+            <ul class="reviews-list">
+                {% for review in restaurant.reviews %}
+                <li class="review-card">
+                    <p><strong>User:</strong> {{ review.user.username }}</p>
+                    <p><strong>Restaurant:</strong> {{ restaurant.name }}</p>
+                    <p><strong>Rating:</strong> {{ review.rating }} / 5</p>
+
+                    {% if review.comment %}
+                        <p><strong>Comment:</strong> {{ review.comment }}</p>
+                    {% else %}
+                        <p><em>No comment.</em></p>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No reviews yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="restaurant-details-actions">
+        <a href="{{ url_for('reservation.choose_date', restaurant_id=restaurant.id) }}" class="btn">
+            Reserve table
+        </a>
+
+        <a href="{{ url_for('restaurants.list_restaurants') }}" class="btn btn-secondary">
+            Back to list
+        </a>
+    </div>
+
+    {% if session["role"] in ["admin", "provider"] and restaurant.owner_id == session["user_id"] or session["role"] ==
+    "admin" %}
+    <a href="{{ url_for('restaurants.edit_restaurant', restaurant_id=restaurant.id) }}" class="btn btn-secondary">
+        Edit Restaurant
+    </a>
+    {% endif %}
+
+</div>
+{% endblock %}

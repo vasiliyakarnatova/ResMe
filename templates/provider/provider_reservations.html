@@ -1,0 +1,14 @@
+{% extends "layouts/layout.html" %}
+{% block title %}Reservations for my restaurants{% endblock %}
+
+{% block content %}
+<h1>Reservations for my restaurants</h1>
+
+{% if reservations %}
+    {% set view_type = "provider" %}
+    {% include "partials/reservations_table.html" %}
+{% else %}
+    <p>No reservations for your restaurants yet.</p>
+{% endif %}
+
+{% endblock %}

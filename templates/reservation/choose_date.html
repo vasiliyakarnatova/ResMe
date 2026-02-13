@@ -1,0 +1,76 @@
+{% extends "layouts/layout.html" %}
+{% block title %} Make reservation {% endblock %}
+{% block content %}
+<h1>Step 1 of 4 - Choose a date</h1>
+
+<div class="reservation-step-wrapper">
+  <div class="reservation-step-box">
+    <div class="reservation-step-month">
+        {% if not is_current_month %}
+        <a class="month-nav" href="{{ url_for('reservation.choose_date', restaurant_id=restaurant.id, year=prev_year, month=prev_month) }}">
+            &laquo;
+        </a>
+        {% endif %}
+
+        {{ month }} / {{ year }}
+
+        <a class="month-nav" href="{{ url_for('reservation.choose_date', restaurant_id=restaurant.id, year=next_year, month=next_month) }}">
+            &raquo;
+        </a>
+    </div>
+
+    <table class="calendar">
+        <thead>
+        <tr>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+            <th>Sun</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for week in weeks %}
+            <tr>
+            {% for day in week %}
+                {% if day %}
+                    {% set status = availability.get(day) %}
+                    <td class="day-cell {{ status }}">
+                        {% if status == "free" %}
+                            <a class="day-link"
+                               href="{{ url_for('reservation.select_people_count',
+                                                restaurant_id=restaurant.id,
+                                                date=day.isoformat()) }}">
+                                {{ day.day }}
+                            </a>
+                        {% else %}
+                            <span class="day-text">{{ day.day }}</span>
+                        {% endif %}
+                    </td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+            {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+  </div>
+</div>
+
+{% if is_edit and edit_date %}
+  <div class="reservation-step-box" style="margin-top: 16px;">
+    <form method="get"
+          action="{{ url_for('reservation.select_people_count', restaurant_id=restaurant.id) }}">
+      <input type="hidden" name="date" value="{{ edit_date }}">
+      <button type="submit" class="time-btn time-free">
+        Continue with the same date ({{ edit_date }})
+      </button>
+    </form>
+  </div>
+{% endif %}
+
+
+{% endblock %}

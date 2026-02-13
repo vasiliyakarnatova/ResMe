@@ -1,0 +1,11 @@
+{% extends "layouts/layout.html" %}
+{% block title %} Login {% endblock %}
+{% block content %}
+    <h1>Login</h1>
+    <p>If you don't have a profile yet <a href="{{ url_for('auth.registration') }}" >Register</a></p>
+    <form action="{{ url_for('auth.login') }}" method="post">
+        Enter username or email: <input name="usernameOrEmail" required maxlength="255">
+        Password: <input type=password name="password" required maxlength="30">
+        <button type="submit">Login</button>
+    </form>
+{% endblock %}

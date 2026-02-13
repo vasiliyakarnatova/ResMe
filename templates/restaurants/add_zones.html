@@ -1,0 +1,40 @@
+{% extends "layouts/layout.html" %}
+{% block title %} Add zones {% endblock %}
+{% block content %}
+<h2>Zones for {{ restaurant.name }}</h2>
+<form method="post" action="{{ url_for('create_restaurant.add_zones', restaurant_id=restaurant.id) }}">
+    <input type="text" name="zone" required>
+    <button type="submit">+ Add zone</button>
+</form>
+{% for zone in zones %}
+  <div class="zone-card">
+
+    <form method="post"
+          action="{{ url_for('create_restaurant.add_zones', restaurant_id=restaurant.id) }}">
+      <input type="hidden" name="zone_id" value="{{ zone.id }}">
+      <input type="text" name="zone_name" value="{{ zone.name }}" required>
+
+      <div class="zone-actions">
+        <button type="submit">Save</button>
+    </form>
+
+        <form method="post"
+              action="{{ url_for('create_restaurant.delete_zones',
+                                 restaurant_id=restaurant.id,
+                                 zone_id=zone.id) }}">
+          <button type="submit">Remove</button>
+        </form>
+      </div>
+
+  </div>
+{% endfor %}
+
+
+<div style="margin-top: 20px;">
+    <a class="btn"
+       href="{{ url_for('create_restaurant.add_tables', restaurant_id=restaurant.id) }}">
+        Continue with tables →
+    </a>
+</div>
+
+{% endblock %}

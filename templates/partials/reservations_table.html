@@ -1,0 +1,81 @@
+<div class="reservations-table">
+
+    <div class="reservations-header">
+        <div>Restaurant</div>
+        <div>Date</div>
+        <div>Time</div>
+        <div>Table</div>
+        <div>Status</div>
+
+        {% if view_type == "provider" %}
+            <div>Change</div>
+            <div>Edit</div>
+        {% else %}
+            <div>Cancel</div>
+            <div>Edit</div>
+        {% endif %}
+    </div>
+
+    {% for r in reservations %}
+        <div class="reservations-row">
+            <div>{{ r.restaurant.name }}</div>
+            <div>{{ r.date.strftime("%d.%m.%Y") }}</div>
+            <div>{{ r.date.strftime("%H:%M") }}</div>
+            <div>
+                {{ r.table.name }}
+                {% if r.table.zone %}
+                    ({{ r.table.zone.name }})
+                {% endif %}
+            </div>
+
+            <div>
+                {{ r.status.value }}
+            </div>
+
+            <div>
+                {% if view_type == "provider" %}
+                    {% if r.status != ReservationStatus.canceled %}
+                        <form method="post"
+                              action="{{ url_for('provider.provider_reservation_change_status', reservation_id=r.id) }}">
+                            <select name="status" class="status-select">
+                                <option value="accepted"
+                                    {% if r.status == ReservationStatus.accepted %}selected{% endif %}>accepted</option>
+                                <option value="pending"
+                                    {% if r.status == ReservationStatus.pending %}selected{% endif %}>pending</option>
+                                <option value="canceled"
+                                    {% if r.status == ReservationStatus.canceled %}selected{% endif %}>canceled</option>
+                            </select>
+                            <button type="submit" class="small-btn">Save</button>
+                        </form>
+                    {% else %}
+                        <span>-</span>
+                    {% endif %}
+                {% else %}
+                    {% if r.status not in [ReservationStatus.canceled,
+                                           ReservationStatus.completed] %}
+                        <form method="post"
+                              action="{{ url_for('profile.cancel_reservation', reservation_id=r.id) }}">
+                            <button type="submit" class="small-btn cancel-btn">Cancel</button>
+                        </form>
+                    {% else %}
+                        <span>-</span>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div>
+                {% if r.status not in [ReservationStatus.canceled,
+                                       ReservationStatus.completed] %}
+                    {% if view_type == "provider" %}
+                        <a href="{{ url_for('provider.provider_reservation_edit', reservation_id=r.id) }}"
+                           class="small-btn edit-btn">Edit</a>
+                    {% else %}
+                        <a href="{{ url_for('profile.profile_reservation_edit', reservation_id=r.id) }}"
+                           class="small-btn edit-btn">Edit</a>
+                    {% endif %}
+                {% else %}
+                    <span>-</span>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>

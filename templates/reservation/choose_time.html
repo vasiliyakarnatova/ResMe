@@ -1,0 +1,40 @@
+{% extends "layouts/layout.html" %}
+{% block title %}Make reservation{% endblock %}
+{% block content %}
+<h1>Step 3 of 4 - Choose time</h1>
+
+<p>Date: <strong>{{ date.strftime("%d.%m.%Y") }}</strong></p>
+<p>People: <strong>{{ people }}</strong></p>
+
+<form method="post">
+    <input type="hidden" name="date" value="{{ date.isoformat() }}">
+    <input type="hidden" name="people" value="{{ people }}">
+
+    <div class="time-grid">
+        {% for row in slot_rows %}
+        <div class="time-row">
+            {% for slot in row %}
+            {% if slot.free %}
+            <button type="submit" name="time" value="{{ slot.time.isoformat(timespec='minutes') }}" class="time-btn time-free">
+                {{ slot.time.strftime("%H:%M") }}
+            </button>
+            {% else %}
+            <button type="button" class="time-btn time-busy" disabled>
+                {{ slot.time.strftime("%H:%M") }}
+            </button>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</form>
+    {% if is_edit and edit_time %}
+    <form method="post" style="margin-top: 10px;">
+        <input type="hidden" name="date" value="{{ date.isoformat() }}">
+        <input type="hidden" name="people" value="{{ people }}">
+        <button type="submit" name="time" value="{{ edit_time }}" class="time-btn time-free">
+            Continue with the same time ({{ edit_time }})
+        </button>
+    </form>
+    {% endif %}
+{% endblock %}

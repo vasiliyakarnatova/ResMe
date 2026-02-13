@@ -1,0 +1,32 @@
+{% extends "layouts/layout.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+
+    <div class="profile-header">
+        <div class="profile-avatar">
+            👤
+        </div>
+
+        <div class="profile-info">
+            <h1 class="profile-name">
+                {{ user.username }}
+            </h1>
+            <p class="profile-email">
+                {{ user.email }}
+            </p>
+        </div>
+    </div>
+
+    <h2 class="profile-section-title">My reservations</h2>
+
+    {% if reservations %}
+        {% set view_type = "client" %}
+        {% include "partials/reservations_table.html" %}
+    {% else %}
+        <p>You have no reservations.</p>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "layouts/layout.html" %}
+{% block title %}Restaurants{% endblock %}
+
+{% block content %}
+    <h1>My Restaurants</h1>
+    <p>List of restaurants you manage.</p>
+
+    <a href="{{ url_for('create_restaurant.add_new_restaurant') }}" class="btn">+ Add Restaurant</a>
+
+    {% include "partials/restaurant_list.html" %}
+{% endblock %}
+

@@ -1,0 +1,19 @@
+{% extends "layouts/layout.html" %}
+{% block title %} Add tables {% endblock %}
+{% block content %}
+<h2> Tables for {{ restaurant.name }}</h2>
+<form class="wide-form" action="{{ url_for('create_restaurant.add_tables', restaurant_id=restaurant.id) }}"
+      method="post">
+    <ul>
+        {% for zone in zones %}
+        <li>{{ zone.name }}</li>
+        Numbers of tables for two (2): <input name="two_seated_{{ zone.id }}" required>
+        Numbers of tables for four (4): <input name="four_seated_{{ zone.id }}" required>
+        Numbers of booths for six (6): <input name="six_seated_{{ zone.id }}" required>
+        Numbers of booths for ten (10): <input name="ten_seated_{{ zone.id }}" required>
+        {% endfor %}
+    </ul>
+
+    <button type="submit">Create Restaurant</button>
+</form>
+{% endblock %}

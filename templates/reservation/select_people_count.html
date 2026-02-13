@@ -1,0 +1,23 @@
+{% extends "layouts/layout.html" %}
+{% block title %} Make reservation {% endblock %}
+{% block content %}
+<h1>Step 2 of 4 - Select people count</h1>
+<p>Selected date: <strong>{{ selected_date.strftime("%d.%m.%Y") }}</strong></p>
+
+<form class="wide-form" method="post">
+    <input type="hidden" name="date" value="{{ selected_date.isoformat() }}">
+    Count of people: <input type="number" name="count" min="1" required>
+    <button type="submit">Continue</button>
+</form>
+
+{% if is_edit and edit_people %}
+<form method="post" style="margin-top: 10px;">
+    <input type="hidden" name="date" value="{{ selected_date.isoformat() }}">
+    <input type="hidden" name="count" value="{{ edit_people }}">
+    <button type="submit" class="time-btn time-free">
+        Continue with the same people count ({{ edit_people }})
+    </button>
+</form>
+{% endif %}
+
+{% endblock %}

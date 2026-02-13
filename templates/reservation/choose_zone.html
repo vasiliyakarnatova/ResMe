@@ -1,0 +1,45 @@
+{% extends "layouts/layout.html" %}
+{% block title %}Make reservation{% endblock %}
+{% block content %}
+<h1>Step 4 of 4 - Choose a zone</h1>
+
+<p>Date: <strong>{{ date.strftime("%d.%m.%Y") }}</strong></p>
+<p>Time: <strong>{{ time.strftime("%H:%M") }}</strong></p>
+<p>People: <strong>{{ people }}</strong></p>
+
+<form method="post">
+    <input type="hidden" name="date" value="{{ date.isoformat() }}">
+    <input type="hidden" name="time" value="{{ time.strftime('%H:%M') }}">
+    <input type="hidden" name="people" value="{{ people }}">
+
+    <div class="reservation-step-wrapper">
+        <div class="reservation-step-box">
+            <div class="zone-list">
+                {% for item in zones %}
+                {% if item.free %}
+                <button type="submit" name="zone_id" value="{{ item.zone.id }}" class="time-btn time-free zone-btn">
+                    {{ item.zone.name }}
+                </button>
+                {% else %}
+                <button type="button" class="time-btn time-busy zone-btn" disabled>
+                    {{ item.zone.name }} (no free tables)
+                </button>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</form>
+{% if is_edit and edit_zone_id %}
+<form method="post" style="margin-top: 10px;">
+    <input type="hidden" name="date" value="{{ date.isoformat() }}">
+    <input type="hidden" name="people" value="{{ people }}">
+    <input type="hidden" name="time" value="{{ time }}">
+    <input type="hidden" name="zone_id" value="{{ edit_zone_id }}">
+    <button type="submit" class="time-btn time-free">
+        Continue with the same zones ({{ edit_zone_name }})
+    </button>
+</form>
+{% endif %}
+
+{% endblock %}
